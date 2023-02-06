@@ -2,15 +2,16 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 const button = document.querySelector('button');
-const timer = document.querySelector('.timer');
-const value = document.querySelector('.value');
+const value = document.querySelectorAll('.value');
+let selectDate = undefined;
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-      if (selectedDates[0] < options.defaultDate) {
+    selectDate = selectedDates[0]
+    if (selectDate < options.defaultDate) {
           window.alert("Please choose a date in the future")
           button.disabled = true;    
       } else {
@@ -19,10 +20,16 @@ const options = {
   },
 };
 
-flatpickr("#datetime-picker", options);
-button.addEventListener('click', convertMs)
+flatpickr('#datetime-picker', options);
+button.disabled = true;
+// console.log(calendar);
+button.addEventListener('click', startTimer);
+
 
 function convertMs(ms) {
+  const now = new Date().getTime();
+  ms = selectDate - now;
+  // console.log(selectDate.toString());
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -33,9 +40,18 @@ function convertMs(ms) {
   const minutes = Math.floor(((ms % day) % hour) / minute);
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-    return { days, hours, minutes, seconds };
+  value[0].textContent = `${addLeadingZero(days)}`;
+  value[1].textContent = `${addLeadingZero(hours)}`;
+  value[2].textContent = `${addLeadingZero(minutes)}`;
+  value[3].textContent = `${addLeadingZero(seconds)}`;
+
+    // return { days, hours, minutes, seconds };
 }
 
-function addLeadingZero(number) {
-  return String(number).padStart(2, 0);
+function startTimer() {
+ let intervalId = setInterval(convertMs, 1000);
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, 0);
 }
