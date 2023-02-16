@@ -12,9 +12,9 @@ refs.button.addEventListener('click', onFormSubmit)
 
 function onFormSubmit(e) {
   e.preventDefault();
-  const amount = refs.amount[0].value;
-  const firstDelay = refs.delay[0].value;
-  const delayStep = refs.step[0].value;
+  const amount = Number(refs.amount[0].value);
+  const firstDelay = Number(refs.delay[0].value);
+  const delayStep = Number(refs.step[0].value);
   console.log(amount, firstDelay, delayStep);
 
   let delay = 0;
